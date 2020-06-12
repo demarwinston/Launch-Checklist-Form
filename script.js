@@ -2,6 +2,33 @@ window.addEventListener("load", function () {
 
 	let form = document.querySelector("form");
 	fetchData();
+	function fetchData() {
+
+		fetch('https://handlers.education.launchcode.org/static/planets.json').then(
+			function (response) {
+				response.json().then(function (data) {
+	
+					let targets = document.getElementById('missionTarget');
+	
+					let random = Math.round(Math.random() * data.length);
+					let respJson = data[random];
+	
+					targets.innerHTML =
+						`<h2>Mission Destination</h2>
+					<ol>
+					   <li>Name: ${respJson.name}</li>
+					   <li>Diameter: ${respJson.diameter}</li>
+					   <li>Star: ${respJson.stat}</li>
+					   <li>Distance from Earth: ${respJson.distance}</li>
+					   <li>Number of Moons: ${respJson.moons}</li>
+					</ol>
+					<img src="${respJson.image}">`
+	
+	
+				});
+			})
+	
+	}
 
 	form.addEventListener("submit", function (event) {
 
@@ -23,12 +50,18 @@ window.addEventListener("load", function () {
 		fuelLevel = Number(fuelLevel);
 		cargoMass = Number(cargoMass);
 
-		if (isNaN(pilotName) || isNaN(copilotName) || isNaN(fuelLevel) || isNaN(cargoMass)) {
+		
+		   if (isNaN(pilotName) === false || isNaN(copilotName) === false) {
+			alert("Please enter valid name");
+			event.preventDefault();
+		 } else if (isNaN(fuelLevel) === true || isNaN(cargoMass) === true) {
+			alert("Please enter valid number");
+			event.preventDefault();
 
-			alert("Invalid information")
-			items.style.visibility = 'hidden'
-			launchStatus.style.color = 'black';
-			launchStatus.innerHTML = 'Awaiting Information Before Launch';
+			// alert("Invalid information")
+			// items.style.visibility = 'hidden'
+			// launchStatus.style.color = 'black';
+			// launchStatus.innerHTML = 'Awaiting Information Before Launch';
 
 
 
@@ -79,33 +112,6 @@ window.addEventListener("load", function () {
 });
 
 
-function fetchData() {
-
-	fetch('https://handlers.education.launchcode.org/static/planets.json').then(
-		function (response) {
-			response.json().then(function (data) {
-
-				let targets = document.getElementById('missionTarget');
-
-				let random = Math.round(Math.random() * data.length);
-				let respJson = data[random];
-
-				targets.innerHTML =
-					`<h2>Mission Destination</h2>
-				<ol>
-				   <li>Name: ${respJson.name}</li>
-				   <li>Diameter: ${respJson.diameter}</li>
-				   <li>Star: ${respJson.stat}</li>
-				   <li>Distance from Earth: ${respJson.distance}</li>
-				   <li>Number of Moons: ${respJson.moons}</li>
-				</ol>
-				<img src="${respJson.image}">`
-
-
-			});
-		})
-
-}
 
 
 // This block of code shows how to format the HTML once you fetch some planetary JSON!
